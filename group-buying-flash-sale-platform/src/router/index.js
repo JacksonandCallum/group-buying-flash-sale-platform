@@ -5,8 +5,19 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('../views/Home.vue')
+      redirect: '/manager/home'
+    },
+    {
+      path: '/manager',
+      redirect: '/manager/home',
+      component: () => import('../views/Manager.vue'),
+      children: [
+        {
+          path: 'home',
+          meta: { name: '系统首页' },
+          component: () => import('../views/manager/Home.vue')
+        }
+      ]
     },
     {
       path: '/404',

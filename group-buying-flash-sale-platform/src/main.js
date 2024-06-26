@@ -7,6 +7,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import "@/assets/css/global.css"
+import "@/assets/css/manager.css"
 
 const app = createApp(App)
 
