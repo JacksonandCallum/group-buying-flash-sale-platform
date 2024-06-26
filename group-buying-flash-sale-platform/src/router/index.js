@@ -20,8 +20,15 @@ const router = createRouter({
       ]
     },
     {
+      path: '/login',
+      component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/register',
+      component: () => import('../views/Register.vue')
+    },
+    {
       path: '/404',
-      name: '404',
       component: () => import('../views/404.vue')
     },
     // 匹配所有未定义路由，统一重定向到404页面
