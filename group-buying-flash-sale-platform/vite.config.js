@@ -11,7 +11,6 @@ export default defineConfig({
   plugins: [
     vue(),
     // 按需定制主题配置
-    // 按需定制主题配置
     Components({
       resolvers: [
         // 配置elementPlus采用sass样式配色系统
