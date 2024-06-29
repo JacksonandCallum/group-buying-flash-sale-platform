@@ -50,6 +50,13 @@
     padding: 10px;
 }
 
+.box{
+    background-color: white;
+    padding:10px;
+    border-radius:5px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1)
+}
+
 /**  Element-UI **/
 .el-breadcrumb__item:last-child .el-breadcrumb__inner {
     color: white !important;
@@ -89,4 +96,7 @@
 .el-menu-item:not(.is-active):hover {
     color: #fff;
     background-color: #1890ff !important;
+}
+.el-table .el-table__cell {
+    text-align: center !important;
 }

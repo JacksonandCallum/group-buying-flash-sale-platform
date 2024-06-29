@@ -21,7 +21,7 @@
                             style="width: 40px; height: 40px; display: block; border-radius: 50%">
                         <img v-else src="@/assets/imgs/avatar.png" alt=""
                             style="width: 40px; height: 40px; display: block; border-radius: 50%">
-                        <span style="margin-left: 5px">{{ data.user?.name }}</span>
+                        <span style="margin-left: 5px">{{ data.user?.username }}</span>
                     </div>
                     <template #dropdown>
                         <el-dropdown-menu>
@@ -50,7 +50,7 @@
                             </el-icon>
                             <span>信息管理</span>
                         </template>
-                        <el-menu-item index="">xxx信息</el-menu-item>
+                        <el-menu-item index="/manager/user">用户信息</el-menu-item>
                     </el-sub-menu>
                 </el-menu>
             </div>
@@ -69,9 +69,7 @@ import router from '@/router/index.js';
 import { reactive } from "vue"
 
 const data = reactive({
-    user: {
-        name: JSON.parse(localStorage.getItem("flash-sale-user" || '{}'))
-    }
+    user: JSON.parse(localStorage.getItem("flash-sale-user" || '{}'))
 })
 
 const logout = () => {
