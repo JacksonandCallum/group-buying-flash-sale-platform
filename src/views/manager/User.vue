@@ -16,7 +16,12 @@
             <el-table-column prop="username" label="账号"></el-table-column>
             <el-table-column prop="name" label="姓名"></el-table-column>
             <el-table-column prop="role" label="角色"></el-table-column>
-            <el-table-column prop="avatar" label="头像"></el-table-column>
+            <el-table-column prop="avatar" label="头像">
+                <template #default="scope">
+                    <el-image :src="scope.row.avatar" style="width: 50px; height: 50px;" preview-teleported
+                        :preview-src-list="[scope.row.avatar]"></el-image>
+                </template>
+            </el-table-column>
             <el-table-column prop="phone" label="手机号"></el-table-column>
             <el-table-column prop="email" label="邮箱"></el-table-column>
             <el-table-column label="操作" header-align="center" width="260">
@@ -50,6 +55,12 @@
                     <el-option value="ADMIN" label="管理员"></el-option>
                     <el-option value="USER" label="用户"></el-option>
                 </el-select>
+            </el-form-item>
+            <el-form-item label="头像">
+                <el-upload :action="fileUploadUrl" :on-success="handleAvatarSuccess"
+                    :headers="{ flashsaletoken: data.user.token }">
+                    <el-button type="primary">上传头像</el-button>
+                </el-upload>
             </el-form-item>
             <el-form-item label="手机号">
                 <el-input v-model="data.form.phone" autocomplete="off" placeholder="请输入手机号"></el-input>
@@ -87,6 +98,8 @@ import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 
+const fileUploadUrl = import.meta.env.VITE_BASE_URL + '/files/upload';
+
 const validatePass = (rule, value, callback) => {
     if (!value) {
         callback(new Error('请确认密码'))
@@ -98,6 +111,7 @@ const validatePass = (rule, value, callback) => {
 }
 
 const data = reactive({
+    user: JSON.parse(localStorage.getItem("flash-sale-user") || '{}'),
     username: "",
     tableData: [],
     pageNum: 1,
@@ -255,5 +269,9 @@ const delBatch = () => {
         })
     }).catch(err => { })
 
+}
+
+const handleAvatarSuccess = (res) => {
+    data.form.avatar = res.data;
 }
 </script>
