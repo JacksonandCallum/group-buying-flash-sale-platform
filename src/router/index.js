@@ -31,6 +31,11 @@ const router = createRouter({
           path: 'password',
           meta: { name: '修改密码' },
           component: () => import('../views/manager/Password.vue')
+        },
+        {
+          path: 'logs',
+          meta: { name: '系统日志' },
+          component: () => import('../views/manager/Logs.vue')
         }
       ]
     },
