@@ -76,6 +76,7 @@
     line-height: 50px;
     background-color: #011223 !important;
 }
+
 :deep(.el-sub-menu__title:hover) {
     background-color: #fff; /* 必须加上这个背景色，否则鼠标移入会出现白色 */
     color: #fff;
@@ -93,6 +94,12 @@
     color: #fff !important;
     background-color: #1890ff !important;
 }
+
+.el-menu .el-sub-menu__title {
+    background-color: #fff !important;
+    color: black;
+}
+
 .el-menu-item:not(.is-active):hover {
     color: #fff;
     background-color: #1890ff !important;

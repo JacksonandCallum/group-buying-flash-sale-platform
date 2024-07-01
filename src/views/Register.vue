@@ -1,56 +1,32 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <div
-        style="
+      <div style="
           font-weight: bold;
           font-size: 24px;
           text-align: center;
           margin-bottom: 30px;
           color: #ea5455;
-        "
-      >
+        ">
         欢 迎 注 册
       </div>
       <el-form :model="data.form" ref="formRef" :rules="data.rules">
         <el-form-item prop="username">
-          <el-input
-            :prefix-icon="User"
-            size="large"
-            v-model="data.form.username"
-            placeholder="请输入账号"
-          />
+          <el-input :prefix-icon="User" size="large" v-model="data.form.username" placeholder="请输入账号" />
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            :prefix-icon="Lock"
-            size="large"
-            v-model="data.form.password"
-            placeholder="请输入密码"
-            show-password
-          />
+          <el-input :prefix-icon="Lock" size="large" v-model="data.form.password" placeholder="请输入密码" show-password />
         </el-form-item>
         <el-form-item prop="confirmPassword">
-          <el-input
-            :prefix-icon="Lock"
-            size="large"
-            v-model="data.form.confirmPassword"
-            placeholder="请确认密码"
-            show-password
-          />
+          <el-input :prefix-icon="Lock" size="large" v-model="data.form.confirmPassword" placeholder="请确认密码"
+            show-password />
         </el-form-item>
         <el-form-item>
-          <el-button
-            size="large"
-            type="primary"
-            style="
+          <el-button size="large" type="primary" style="
               width: 100%;
               background-color: #ea5455;
               border-color: #ea5455;
-            "
-            @click="register"
-            >注 册</el-button
-          >
+            " @click="register">注 册</el-button>
         </el-form-item>
       </el-form>
       <div style="text-align: right">
@@ -63,6 +39,9 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { User, Lock } from "@element-plus/icons-vue";
+import request from "@/utils/request";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 
 const validatePass = (rule, value, callback) => {
   if (!value) {
@@ -77,19 +56,40 @@ const validatePass = (rule, value, callback) => {
 const data = reactive({
   form: {},
   rules: {
-    username: [{ required: true, message: "请输入账号", trigger: "blur" }],
-    password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+    username: [
+      { required: true, message: "请输入账号", trigger: "blur" },
+      {
+        pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/,
+        message: "只包含字母、数字或中文字符",
+        trigger: 'blur'
+      }],
+    password: [
+      { required: true, message: "请输入密码", trigger: "blur" },
+      {
+        pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/,
+        message: "密码必须是8~16位，包含字母和数字",
+        trigger: 'blur'
+      }
+    ],
     confirmPassword: [{ validator: validatePass, trigger: "blur" }],
   },
 });
 
 const formRef = ref();
+const router =useRouter();
 
 const register = () => {
   formRef.value.validate((valid) => {
     if (valid) {
       //  valid 是 true表示表单验证通过
-      alert("调用后台发起注册");
+      request.post("/web/register", data.form).then(res => {
+        if (res.code === '200') {
+          ElMessage.success("注册成功")
+          router.push("/login")
+        } else {
+          ElMessage.error(res.msg)
+        }
+      })
     } else {
       alert("表单验证不通过");
     }
@@ -106,6 +106,7 @@ const register = () => {
   align-items: center;
   background-image: linear-gradient(135deg, #feb692 10%, #ea5455 100%);
 }
+
 .login-box {
   width: 350px;
   padding: 30px;
