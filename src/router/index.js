@@ -36,6 +36,11 @@ const router = createRouter({
           path: 'logs',
           meta: { name: '系统日志' },
           component: () => import('../views/manager/Logs.vue')
+        },
+        {
+          path: 'category',
+          meta: { name: '商品信息' },
+          component: () => import('../views/manager/Category.vue')
         }
       ]
     },
