@@ -44,15 +44,17 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import { User, Lock,CircleCheck  } from "@element-plus/icons-vue";
+import { User, Lock, CircleCheck } from "@element-plus/icons-vue";
 import request from "@/utils/request";
 import { ElMessage } from "element-plus";
 
 const data = reactive({
   form: {},
+  captchaImg: '',
   rules: {
     username: [{ required: true, message: "请输入账号", trigger: "blur" }],
     password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+    code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
   },
 });
 
@@ -70,11 +72,25 @@ const login = () => {
           }, 500)
         } else {
           ElMessage.error(res.msg)
+          getCaptchaImage()
         }
       })
     }
   });
 };
+
+const getCaptchaImage = () => {
+  request.get("/web/captcha").then(res => {
+    if (res.code === '200') {
+      data.form.uuid = res.data.uuid
+      data.captchaImage = "data:image/gif;base64," + res.data.img
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
+};
+
+getCaptchaImage()
 </script>
 
 <style scoped>
