@@ -170,8 +170,4 @@ const delBatch = () => {
     }).catch(err => { })
 
 }
-
-const handleAvatarSuccess = (res) => {
-    data.form.avatar = res.data;
-}
 </script>
