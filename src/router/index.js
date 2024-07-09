@@ -46,6 +46,11 @@ const router = createRouter({
           path: 'goods',
           meta: { name: '商品管理' },
           component: () => import('../views/manager/Goods.vue')
+        },
+        {
+          path: 'carousel',
+          meta: { name: '广告信息' },
+          component: () => import('../views/manager/Carousel.vue')
         }
       ]
     },
