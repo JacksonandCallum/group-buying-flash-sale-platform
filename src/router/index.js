@@ -39,8 +39,13 @@ const router = createRouter({
         },
         {
           path: 'category',
-          meta: { name: '商品信息' },
+          meta: { name: '商品分类' },
           component: () => import('../views/manager/Category.vue')
+        },
+        {
+          path: 'goods',
+          meta: { name: '商品管理' },
+          component: () => import('../views/manager/Goods.vue')
         }
       ]
     },

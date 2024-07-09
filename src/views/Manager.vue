@@ -53,6 +53,7 @@
                         <el-menu-item index="/manager/user">用户信息</el-menu-item>
                         <el-menu-item index="/manager/logs">日志信息</el-menu-item>
                         <el-menu-item index="/manager/category">商品分类</el-menu-item>
+                        <el-menu-item index="/manager/goods">商品管理</el-menu-item>
                     </el-sub-menu>
                 </el-menu>
             </div>

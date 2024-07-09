@@ -107,3 +107,9 @@
 .el-table .el-table__cell {
     text-align: center !important;
 }
+
+.el-dialog__body img{
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
