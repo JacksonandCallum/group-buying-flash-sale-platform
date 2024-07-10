@@ -55,6 +55,18 @@ const router = createRouter({
       ]
     },
     {
+      path: '/front',
+      redirect: '/front/home',
+      component: () => import('../views/Front.vue'),
+      children: [
+        {
+          path: 'home',
+          meta: { name: '首页' },
+          component: () => import('../views/front/Home.vue')
+        },
+      ]
+    },
+    {
       path: '/login',
       component: () => import('../views/Login.vue')
     },

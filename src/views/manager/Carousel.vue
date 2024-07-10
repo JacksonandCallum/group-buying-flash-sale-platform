@@ -17,7 +17,7 @@
             <el-table-column prop="img" label="推荐图片">
                 <template #default="scope">
                     <el-image v-if="scope.row.img" :src="scope.row.img" :preview-src-list="[scope.row.img]"
-                        preview-teleported style="width: 100px; height: 60px"></el-image>
+                        preview-teleported style="width: 55px; height: 55px"></el-image>
                 </template>
             </el-table-column>
             <el-table-column label="操作" header-align="center" width="260">

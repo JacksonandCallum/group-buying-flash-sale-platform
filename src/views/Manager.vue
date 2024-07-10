@@ -80,4 +80,12 @@ const logout = () => {
     localStorage.removeItem("flash-sale-user");
     location.href = '/login'
 }
+
+const updateUser = () => {
+    data.user = JSON.parse(localStorage.getItem('flash-sale-user') || '{}')   // 重新获取下用户的最新信息
+}
 </script>
+
+<style scoped>
+@import "@/assets/css/manager.css";
+</style>
