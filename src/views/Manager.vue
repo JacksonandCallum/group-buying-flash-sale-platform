@@ -17,7 +17,7 @@
                 <!-- 右侧头像和用户名 -->
                 <el-dropdown style="cursor: pointer;">
                     <div style="padding-right: 20px; display: flex; align-items: center;">
-                        <img v-if="data.user.avatar" :src="data.user?.avatar" alt=""
+                        <img v-if="data.user" :src="data.user?.avatar" alt=""
                             style="width: 40px; height: 40px; display: block; border-radius: 50%">
                         <img v-else src="@/assets/imgs/avatar.png" alt=""
                             style="width: 40px; height: 40px; display: block; border-radius: 50%">
