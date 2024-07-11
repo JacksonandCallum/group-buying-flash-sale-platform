@@ -62,7 +62,7 @@
     <div style="margin-top: 30px;">
       <div style="display: flex;">
         <div style="flex: 1;font-weight: bold;font-size: 18px;">最新商品</div>
-        <div style="width: 100px;text-align: right;cursor: pointer;">查看更多</div>
+        <div style="width: 100px;text-align: right;cursor: pointer;" @click="navTo('/front/goods')">查看更多</div>
       </div>
     </div>
     <div>
@@ -104,14 +104,16 @@ const loadCarousel = () => {
 }
 
 const loadGoods = () => {
-  request.get("/goods/selectAll", {
+  request.get("/goods/selectPage", {
     params: {
+      pageNum: 1,
+      pageSize: 5,
       hasFlash: false,
       hasGroup: false
     }
   }).then(res => {
     if (res.code === '200') {
-      data.goodsData = res.data
+      data.goodsData = res.data?.list
     } else {
       ElMessage.error(res.msg)
     }
