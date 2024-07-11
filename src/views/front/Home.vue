@@ -22,7 +22,7 @@
                   </div>
                   <div style="margin-top: 5px;color: red;">秒杀倒计时：23:35:21:8</div>
                   <div style="margin-top: 8px;">
-                    <el-button type="danger">去秒杀</el-button>
+                    <el-button type="danger" @click="navTo('/front/goodsDetail?id=' + item.id)">去秒杀</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -73,7 +73,8 @@
           </div>
           <div style="display: flex;align-items: center;font-size: 15px;font-weight: bold;color: red;margin-top: 5px;">
             <div style="flex: 1;">商品价格：￥{{ item.originPrice }}</div>
-            <div style="width: 80px;"><el-button type="warning">去购买</el-button></div>
+            <div style="width: 80px;"><el-button type="warning"
+                @click="navTo('/front/goodsDetail?id=' + item.id)">去购买</el-button></div>
           </div>
         </el-col>
       </el-row>
@@ -130,6 +131,10 @@ const loadFlash = () => {
       ElMessage.error(res.msg)
     }
   })
+}
+
+const navTo = (url) => {
+  location.href = url
 }
 
 onMounted(() => {

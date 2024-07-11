@@ -64,6 +64,11 @@ const router = createRouter({
           meta: { name: '首页' },
           component: () => import('../views/front/Home.vue')
         },
+        {
+          path: 'goodsDetail',
+          meta: { name: '商品详情' },
+          component: () => import('../views/front/GoodsDetail.vue')
+        },
       ]
     },
     {
