@@ -84,7 +84,17 @@ const router = createRouter({
           meta: { name: '订单详情' },
           component: () => import('../views/front/OrdersDetail.vue')
         },
+        {
+          path: 'orders',
+          meta: { name: '订单中心' },
+          component: () => import('../views/front/Orders.vue')
+        },
       ]
+    },
+    {
+      path: '/pay',
+      meta: { name: '支付页面' },
+      component: () => import('../views/Pay.vue')
     },
     {
       path: '/login',

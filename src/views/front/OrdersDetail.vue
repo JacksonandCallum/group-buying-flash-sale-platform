@@ -17,7 +17,8 @@
         <div style="margin-top: 15px;font-size: 15px;">购买数量：{{ data.ordersData.num }}</div>
         <div style="margin-top: 15px;font-size: 15px;">订单总价：<span style="font-size: 18px;color: red;">￥{{
           data.ordersData.total }}</span></div>
-        <div style="margin-top: 15px;"><el-button type="primary" plain style="padding: 20px 30px;">去支付</el-button></div>
+        <div style="margin-top: 15px;"><el-button type="primary" plain style="padding: 20px 30px;"
+            @click="pay">去支付</el-button></div>
       </el-col>
     </el-row>
   </div>
@@ -42,6 +43,10 @@ const loadOrders = () => {
       ElMessage.error(res.msg)
     }
   })
+}
+
+const pay = () => {
+  window.open("/pay?orderNo=" + data.ordersData.orderNo)
 }
 
 onMounted(() => {
