@@ -52,7 +52,8 @@
                 </el-table-column>
                 <el-table-column label="操作" header-align="center" width="260">
                     <template #default="scope">
-                        <el-button plain type="primary" @click="update(scope.row)">发货</el-button>
+                        <el-button plain type="primary" @click="update(scope.row)"
+                            v-if="scope.row.status === 'NOT_SEND'">发货</el-button>
                         <el-button plain type="danger" @click="del(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
