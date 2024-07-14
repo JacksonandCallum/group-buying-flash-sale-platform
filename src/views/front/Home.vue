@@ -32,24 +32,26 @@
         <el-col :span="16">
           <div style="background-color: #faf7f0;height: 350px;border-radius: 10px;padding: 10px 15px">
             <div style="line-height: 30px;height: 30px;font-size: 16px;font-weight: bold;">🔥热门团购</div>
-            <el-carousel height="300px" direction="vertical" interval=4000 style="border-radius: 10px"
-              :pause-on-hover="false" indicator-position="none">
-              <el-carousel-item style="padding: 10px 10px">
-                <div style="padding: 5px 10px 5px 10px; display: flex; align-items: center">
-                  <img src="@/assets/imgs/logo.png" alt=""
+            <el-carousel height="300px" direction="vertical" :interval='4000' style="border-radius: 10px"
+              :pause-on-hover="false" indicator-position="none" @change="getGroup">
+              <el-carousel-item style="padding: 10px 10px" v-for="it in data.pages" :key="it">
+                <div style="padding: 5px 10px 5px 10px; display: flex; align-items: center"
+                  v-for="item in data.groupData" :key="item">
+                  <img :src="item.goodsImg" alt=""
                     style="height: 60px; width: 60px; border-radius: 10px; border: 1px solid #cccccc">
                   <div style="width: 240px; margin-left: 10px">
-                    <div style="font-weight: bold; font-size: 17px" class="overflow">福建漳州甜杨桃5斤水果当季整箱洋桃鲜果新鲜红龙扬桃</div>
-                    <div style="margin-top: 10px; color: red; font-weight: bold">拼团价：￥12.9</div>
+                    <div style="font-weight: bold; font-size: 17px" class="overflow">{{ item.goodsName }}</div>
+                    <div style="margin-top: 10px; color: red; font-weight: bold">拼团价：￥{{ item.goodsPrice }}</div>
                   </div>
                   <div style="width: 180px; margin-left: 10px; display: flex; align-items: center">
-                    <img src="@/assets/imgs/logo.png" alt="" style="height: 50px; width: 50px; border-radius: 50%">
-                    <div style="margin-left: 10px; flex: 1; width: 0" class="overflow">张三</div>
+                    <img :src="item.userAvatar" alt="" style="height: 50px; width: 50px; border-radius: 50%">
+                    <div style="margin-left: 10px; flex: 1; width: 0" class="overflow">{{ item.userName }}</div>
                     <div style="margin-left: 5px; width: 90px" class="overflow">正在拼团中</div>
                   </div>
                   <div style="flex: 1; color: red">倒计时：23:34:21.8</div>
                   <div style="width: 80px; margin-left: 10px">
-                    <el-button type="warning" style="background-color: #faa303">我要参团</el-button>
+                    <el-button type="warning" style="background-color: #faa303"
+                      @click="navTo('/front/GoodsDetail?id=' + item.goodsId + '&orderId=' + item.id)">我要参团</el-button>
                   </div>
                 </div>
               </el-carousel-item>
@@ -90,7 +92,9 @@ import { onMounted, reactive } from 'vue';
 const data = reactive({
   carouselData: [],
   goodsData: [],
-  flashData: []
+  flashData: [],
+  groupData: [],
+  pages: 1
 })
 
 const loadCarousel = () => {
@@ -135,14 +139,37 @@ const loadFlash = () => {
   })
 }
 
+const loadGroup = (pageNum) => {
+  request.get("/orders/selectGroupPage", {
+    params: {
+      type: "GROUP",
+      pageNum: pageNum,
+      pageSize: 4
+
+    }
+  }).then(res => {
+    if (res.code === '200') {
+      data.groupData = res.data.list
+      data.pages = res.data.pages
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
+}
+
 const navTo = (url) => {
   location.href = url
+}
+
+const getGroup = (index) => {
+  loadGroup(index + 1)
 }
 
 onMounted(() => {
   loadCarousel()
   loadGoods()
   loadFlash()
+  loadGroup(1)
 })
 </script>
 

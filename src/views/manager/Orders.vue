@@ -12,6 +12,7 @@
     <div class="box" style="margin-bottom: 5px">
         <el-table :data="data.tableData" stripe @selection-change="handleSelectChange">
             <el-table-column type="selection" width="30"></el-table-column>
+            <el-table-column prop="id" label="id"></el-table-column>
             <el-table-column prop="goodsName" label="商品名称"></el-table-column>
             <el-table-column prop="goodsImg" label="商品图片">
                 <template #default="scope">

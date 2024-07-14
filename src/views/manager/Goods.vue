@@ -16,6 +16,7 @@
     <div class="box" style="margin-bottom: 5px">
         <el-table :data="data.tableData" strip @selection-change="handleSelectChange">
             <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="id" label="id"></el-table-column>
             <el-table-column prop="name" label="商品名称" show-overflow-tooltip></el-table-column>
             <el-table-column prop="categoryName" label="商品分类"></el-table-column>
             <el-table-column prop="img" label="商品图片"  style="display: flex;align-items: center;justify-content: center;">

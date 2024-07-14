@@ -89,6 +89,11 @@ const router = createRouter({
           meta: { name: '订单中心' },
           component: () => import('../views/front/Orders.vue')
         },
+        {
+          path: 'group',
+          meta: { name: '团购专区' },
+          component: () => import('../views/front/Group.vue')
+        },
       ]
     },
     {

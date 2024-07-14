@@ -10,7 +10,7 @@
                 <div class="front-header-nav" style="flex: 1">
                     <el-menu :default-active="router.currentRoute.value.path" mode="horizontal" router>
                         <el-menu-item index="/front/home">首页</el-menu-item>
-                        <el-menu-item index="/front/groupGoods">团购专区</el-menu-item>
+                        <el-menu-item index="/front/group">团购专区</el-menu-item>
                         <el-menu-item index="/front/flashGoods">秒杀专区</el-menu-item>
                         <el-menu-item index="/front/orders">订单中心</el-menu-item>
                         <el-menu-item index="/front/comment">评价中心</el-menu-item>

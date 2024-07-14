@@ -63,6 +63,7 @@ import { onMounted, reactive } from 'vue';
 
 const data = reactive({
   goodsId: router.currentRoute.value.query.id,
+  orderId: router.currentRoute.value.query.orderId,
   goodsData: {},
   num: 1
 })
@@ -118,12 +119,12 @@ const createGroupOrder = () => {
     goodsId: data.goodsId,
     num: data.num,
     type: "GROUP",
-    groupOrderId: data.groupOrderId
+    groupOrderId: data.orderId
   }
   request.post("/orders/add", orderData).then(res => {
     if (res.code === '200') {
-      // 创建订单成功后，会返回订单信息，然后跳转到订单详情页
-      location.href = "/front/ordersDetail?id=" + res.data.id
+      // 创建订单成功后，会返回订单信息，直接走支付
+      window.open("/pay?orderNo=" + res.data.orderNo)
     } else {
       ElMessage.error(res.msg)
     }
