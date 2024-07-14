@@ -56,7 +56,12 @@ const router = createRouter({
           path: 'orders',
           meta: { name: '订单信息' },
           component: () => import('../views/manager/Orders.vue')
-        }
+        },
+        {
+          path: 'comment',
+          meta: { name: '评价信息' },
+          component: () => import('../views/manager/Comment.vue')
+        },
       ]
     },
     {
@@ -93,6 +98,11 @@ const router = createRouter({
           path: 'group',
           meta: { name: '团购专区' },
           component: () => import('../views/front/Group.vue')
+        },
+        {
+          path: 'comment',
+          meta: { name: '评价中心' },
+          component: () => import('../views/front/Comment.vue')
         },
       ]
     },

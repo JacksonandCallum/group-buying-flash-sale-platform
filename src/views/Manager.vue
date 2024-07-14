@@ -56,6 +56,7 @@
                         <el-menu-item index="/manager/goods">商品管理</el-menu-item>
                         <el-menu-item index="/manager/carousel">广告信息</el-menu-item>
                         <el-menu-item index="/manager/orders">订单信息</el-menu-item>
+                        <el-menu-item index="/manager/comment">评价信息</el-menu-item>
                     </el-sub-menu>
                 </el-menu>
             </div>

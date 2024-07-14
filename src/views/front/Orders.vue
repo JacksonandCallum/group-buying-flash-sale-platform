@@ -42,9 +42,10 @@
         </el-table-column>
         <el-table-column label="操作" header-align="center" width="260" fixed="right">
           <template #default="scope">
-            <el-button plain type="primary" @click="update(scope.row)"
+            <el-button plain type="primary" @click="update(scope.row, 'DONE')"
               v-if="scope.row.status === 'NOT_ACCEPT'">确认收货</el-button>
-            <el-button plain type="primary" @click="update(scope.row)" v-if="scope.row.status === 'DONE'">评价</el-button>
+            <el-button plain type="primary" @click="initComment(scope.row)"
+              v-if="scope.row.status === 'DONE'">评价</el-button>
             <el-button plain type="primary" @click="refund(scope.row.orderNo)"
               v-if="scope.row.status === 'DONE'">退款</el-button>
             <el-button plain type="danger" @click="del(scope.row.id)">删除</el-button>
@@ -52,6 +53,23 @@
         </el-table-column>
       </el-table>
     </div>
+
+    <el-dialog title="评价信息" v-model="data.formVisible" width="40%" :close-on-click-modal="false" destroy-on-close>
+      <el-form :model="data.form" label-width="80px" style="padding: 20px 30px" ref="formRef">
+        <el-form-item label="评价内容" prop="content">
+          <el-input type="textarea" :rows="4" v-model="data.form.content" placeholder="评价内容"></el-input>
+        </el-form-item>
+        <el-form-item label="评分" prop="score">
+          <el-rate v-model="data.form.score" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="data.formVisible = false">取消</el-button>
+          <el-button type="primary" @click="comment">提交</el-button>
+        </span>
+      </template>
+    </el-dialog>
 
     <div v-if="data.total" style="margin: 30px auto">
       <el-pagination background layout="total,prev,pager,next" :total="data.total" v-model:current-page='data.pageNum'
@@ -64,7 +82,6 @@
 import request from '@/utils/request';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { onMounted, reactive } from 'vue';
-import router from "@/router/index.js";
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem("flash-sale-user") || '{}'),
@@ -72,6 +89,9 @@ const data = reactive({
   pageNum: 1,
   pageSize: 10,
   total: 0,
+  orderData: [],
+  form: {},
+  formVisible: false
 })
 
 const load = () => {
@@ -102,11 +122,10 @@ const del = (id) => {
   }).catch(err => { })
 }
 
-const update = (row) => {
-  row.status = "DONE"  // 修改状态为已完成
+const update = (row, status) => {
+  row.status = status  // 修改状态为已完成
   request.put("/orders/update", row).then(res => {
     if (res.code === '200') {
-      ElMessage.success("确认收货成功")
       load()
     } else {
       ElMessage.error(res.msg)
@@ -119,6 +138,27 @@ const refund = (orderNo) => {
     if (res.code === '200') {
       ElMessage.success("退款成功")
       load()
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
+}
+
+const initComment = (orderData) => {
+  data.orderData = orderData
+  data.form = {}
+  data.form.userId = data.user.id
+  data.form.goodsId = orderData.goodsId
+  data.formVisible = true
+}
+
+const comment = () => {
+  request.post('/comment/add', data.form).then(res => {
+    if (res.code === '200') {
+      ElMessage.success('评价成功')
+      data.formVisible = false
+      // 更新一下订单的状态
+      update(data.orderData, 'COMMENT_DONE')
     } else {
       ElMessage.error(res.msg)
     }

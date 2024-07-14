@@ -48,7 +48,31 @@
           <div v-html="data.goodsData.content"></div>
         </el-tab-pane>
         <el-tab-pane label="商品评价">
-          <div style="color: #666666;">该商品暂无评价</div>
+          <div style="color: #666666;" v-if="filteredComments.length">
+            <div style="display: flex; margin-top: 10px" v-for="item in filteredComments">
+              <!-- 调试 -->
+              <!-- <div>{{ data.goodsId }} =={{ item.goodsId }}</div> -->
+              <!-- <div v-if="data.goodsId == item.goodsId">             
+              </div> -->
+              <img :src="item.userAvatar" alt="" style="width: 50px; height: 50px; border-radius: 50%">
+                <div style="flex: 1; margin-left: 15px">
+                  <div style="color: #61666d; font-weight: 550">{{ item.userName }}</div>
+                  <div style="margin-top: 10px; line-height: 25px">{{ item.content }}</div>
+                  <div style="display: flex; margin-top: 10px; align-items: center">
+                    <div><el-rate v-model="item.score" disabled /></div>
+                    <div style="color: #999999; margin-left: 20px">{{ item.createTime }}</div>
+                  </div>
+                  <div style="display: flex; margin-top: 15px" v-if="item.reply">
+                    <img src="" alt="" style="width: 50px; height: 50px; border-radius: 50%">
+                    <div style="flex: 1; margin-left: 15px">
+                      <div style="color: #61666d; font-weight: 550">商家 回复：{{ item.userName }}</div>
+                      <div style="margin-top: 10px; line-height: 25px">{{ item.reply }}</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div style="color: #666666;text-align: center;" v-else>该商品暂无评价</div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -59,13 +83,14 @@
 import router from '@/router/index.js';
 import request from '@/utils/request';
 import { ElMessage } from 'element-plus';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive,computed } from 'vue';
 
 const data = reactive({
   goodsId: router.currentRoute.value.query.id,
   orderId: router.currentRoute.value.query.orderId,
   goodsData: {},
-  num: 1
+  num: 1,
+  commentData: []
 })
 
 const loadGoods = () => {
@@ -77,6 +102,11 @@ const loadGoods = () => {
     }
   })
 }
+
+// 计算属性来判断是否有匹配评论
+const filteredComments = computed(() => {
+  return data.commentData.filter(item => item.goodsId == data.goodsId);
+});
 
 const initNum = (num) => {
   data.num = num
@@ -131,8 +161,23 @@ const createGroupOrder = () => {
   })
 }
 
+const loadComment = () => {
+  request.get("/comment/selectAll", {
+    params: {
+      goodsId: data.goodsId
+    }
+  }).then(res => {
+    if (res.code === '200') {
+      data.commentData = res.data
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
+}
+
 onMounted(() => {
   loadGoods()
+  loadComment()
 })
 </script>
 
