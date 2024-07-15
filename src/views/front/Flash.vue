@@ -8,13 +8,18 @@
     <div style="margin-top: 10px;">
       <el-row :gutter="10">
         <el-col :span="5" v-for="item in data.goodsData" style="margin-bottom: 10px;">
-          <img :src="item.img" alt="" style="width: 100%;height: 235px;border-radius: 10px;border: 1px solid #ccc;">
-          <div class="overflow" style="font-size: 17px;font-weight: bold;color: #333;margin-top: 10px">{{ item.name }}
-          </div>
-          <div style="display: flex;align-items: center;font-size: 15px;font-weight: bold;color: red;margin-top: 5px;">
-            <div style="flex: 1;">团购价格：￥{{ item.groupPrice }}</div>
-            <div style="width: 80px;"><el-button type="warning"
-                @click="navTo('/front/goodsDetail?id=' + item.id)">去团购</el-button></div>
+          <div v-if="item.maxTime > 0">
+            <img :src="item.img" alt="" style="width: 100%;height: 235px;border-radius: 10px;border: 1px solid #ccc;">
+            <div class="overflow" style="font-size: 17px;font-weight: bold;color: #333;margin-top: 10px">{{ item.name }}
+            </div>
+            <div style="margin-top: 5px;color: red;">秒杀倒计时：{{ item.hour }}:{{ item.minutes }}:{{ item.seconds
+              }}:{{ item.flashDown }}</div>
+            <div
+              style="display: flex;align-items: center;font-size: 15px;font-weight: bold;color: red;margin-top: 5px;">
+              <div style="flex: 1;">秒杀价格：￥{{ item.flashPrice }}</div>
+              <div style="width: 80px;"><el-button type="danger"
+                  @click="navTo('/front/goodsDetail?id=' + item.id)">去秒杀</el-button></div>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -48,13 +53,17 @@ const load = () => {
         pageNum: data.pageNum,
         pageSize: data.pageSize,
         name: data.name,
-        hasFlash: false,
-        hasGroup: true
+        hasFlash: true,
+        hasGroup: false
       },
     })
     .then((res) => {
       data.goodsData = res.data.list
       data.total = res.data.total
+      data.goodsData.forEach(item => {
+        item.flashDown = 9
+      })
+      setInterval(flashDown, 100)
     });
 };
 
@@ -65,6 +74,24 @@ const reset = () => {
 
 const navTo = (url) => {
   location.href = url
+}
+
+const flashDown = () => {
+  data.goodsData?.forEach(item => {
+    let maxTime = item.maxTime
+    if (maxTime > 0) {
+      let remain = Math.floor(maxTime % 3600)
+      item.hour = Math.floor(maxTime / 3600)
+      item.minutes = Math.floor(remain / 60)
+      item.seconds = Math.floor(remain % 60)
+      if (item.flashDown === 0) {
+        item.maxTime--
+        item.flashDown = 9
+      } else {
+        item.flashDown--
+      }
+    }
+  })
 }
 
 onMounted(() => {

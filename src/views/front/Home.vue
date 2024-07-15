@@ -20,7 +20,8 @@
                   <div class="ellipsis2" style="font-size: 17px;font-weight: bold;">{{ item.name }}</div>
                   <div style="margin-top: 5px;font-size: 16px;font-weight: bold;color: red;">秒杀价：￥{{ item.flashPrice }}
                   </div>
-                  <div style="margin-top: 5px;color: red;">秒杀倒计时：23:35:21:8</div>
+                  <div style="margin-top: 5px;color: red;">秒杀倒计时：{{ item.hour }}:{{ item.minutes }}:{{ item.seconds
+                    }}:{{ item.flashDown }}</div>
                   <div style="margin-top: 8px;">
                     <el-button type="danger" @click="navTo('/front/goodsDetail?id=' + item.id)">去秒杀</el-button>
                   </div>
@@ -48,7 +49,8 @@
                     <div style="margin-left: 10px; flex: 1; width: 0" class="overflow">{{ item.userName }}</div>
                     <div style="margin-left: 5px; width: 90px" class="overflow">正在拼团中</div>
                   </div>
-                  <div style="flex: 1; color: red">倒计时：23:34:21.8</div>
+                  <div style="flex: 1; color: red">倒计时：{{ item.hour }}:{{ item.minutes }}:{{ item.seconds
+                    }}:{{ item.groupDown }}</div>
                   <div style="width: 80px; margin-left: 10px">
                     <el-button type="warning" style="background-color: #faa303"
                       @click="navTo('/front/GoodsDetail?id=' + item.goodsId + '&orderId=' + item.id)">我要参团</el-button>
@@ -94,7 +96,7 @@ const data = reactive({
   goodsData: [],
   flashData: [],
   groupData: [],
-  pages: 1
+  pages: 1,
 })
 
 const loadCarousel = () => {
@@ -113,7 +115,7 @@ const loadGoods = () => {
       pageNum: 1,
       pageSize: 5,
       hasFlash: false,
-      hasGroup: false
+      hasGroup: false,
     }
   }).then(res => {
     if (res.code === '200') {
@@ -133,6 +135,10 @@ const loadFlash = () => {
   }).then(res => {
     if (res.code === '200') {
       data.flashData = res.data
+      data.flashData.forEach(item => {
+        item.flashDown = 9
+      })
+      setInterval(flashDown, 100)
     } else {
       ElMessage.error(res.msg)
     }
@@ -151,6 +157,10 @@ const loadGroup = (pageNum) => {
     if (res.code === '200') {
       data.groupData = res.data.list
       data.pages = res.data.pages
+      data.groupData.forEach(item => {
+        item.groupDown = 9
+      })
+      setInterval(groupDown, 100)
     } else {
       ElMessage.error(res.msg)
     }
@@ -163,6 +173,42 @@ const navTo = (url) => {
 
 const getGroup = (index) => {
   loadGroup(index + 1)
+}
+
+const flashDown = () => {
+  data.flashData?.forEach(item => {
+    let maxTime = item.maxTime
+    if (maxTime > 0) {
+      let remain = Math.floor(maxTime % 3600)
+      item.hour = Math.floor(maxTime / 3600)
+      item.minutes = Math.floor(remain / 60)
+      item.seconds = Math.floor(remain % 60)
+      if (item.flashDown === 0) {
+        item.maxTime--
+        item.flashDown = 9
+      } else {
+        item.flashDown--
+      }
+    }
+  })
+}
+
+const groupDown = () => {
+  data.groupData?.forEach(item => {
+    let maxTime = item.maxTime
+    if (maxTime > 0) {
+      let remain = Math.floor(maxTime % 3600)
+      item.hour = Math.floor(maxTime / 3600)
+      item.minutes = Math.floor(remain / 60)
+      item.seconds = Math.floor(remain % 60)
+      if (item.groupDown === 0) {
+        item.maxTime--
+        item.groupDown = 9
+      } else {
+        item.groupDown--
+      }
+    }
+  })
 }
 
 onMounted(() => {
