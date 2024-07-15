@@ -109,6 +109,11 @@ const router = createRouter({
           meta: { name: '秒杀专区' },
           component: () => import('../views/front/Flash.vue')
         },
+        {
+          path: 'person',
+          meta: { name: '个人中心' },
+          component: () => import('../views/front/Person.vue')
+        },
       ]
     },
     {
